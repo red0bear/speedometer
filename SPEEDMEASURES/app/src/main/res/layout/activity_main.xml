@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <TextView
+        android:id="@+id/SPEED"
+        android:layout_width="408dp"
+        android:layout_height="358dp"
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:text="000"
+        android:textSize="164sp"
+        app:fontFamily="sans-serif"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.487"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.101" />
+
+    <TextView
+        android:id="@+id/speedconvention"
+        android:layout_width="406dp"
+        android:layout_height="244dp"
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:text="KM/H"
+        android:textSize="100sp"
+        app:fontFamily="sans-serif"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.633"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.82" />
+
+    <Button
+        android:id="@+id/speedconversor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:text="KM/H"
+        app:layout_constraintBaseline_toBaselineOf="@+id/toastlatlong"
+        app:layout_constraintStart_toStartOf="@+id/speedconvention" />
+
+    <Button
+        android:id="@+id/toastlatlong"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:text="LAT/LONG"
+        app:layout_constraintStart_toEndOf="@+id/speedconversor"
+        app:layout_constraintTop_toBottomOf="@+id/speedconvention" />
+
+    <Button
+        android:id="@+id/toastgoogle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:text="GOOGLE"
+        app:layout_constraintBaseline_toBaselineOf="@+id/toastlatlong"
+        app:layout_constraintStart_toEndOf="@+id/toastlatlong" />
+
+    <Button
+        android:id="@+id/toastwaze"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:text="WAZE"
+        app:layout_constraintBaseline_toBaselineOf="@+id/toastgoogle"
+        app:layout_constraintStart_toEndOf="@+id/toastgoogle" />
+
+</android.support.constraint.ConstraintLayout>
