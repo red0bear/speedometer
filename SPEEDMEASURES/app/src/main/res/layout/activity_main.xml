@@ -8,8 +8,8 @@
 
     <TextView
         android:id="@+id/SPEED"
-        android:layout_width="408dp"
-        android:layout_height="358dp"
+        android:layout_width="400dp"
+        android:layout_height="254dp"
         android:layout_centerInParent="true"
         android:gravity="center"
         android:text="000"
@@ -25,42 +25,58 @@
     <TextView
         android:id="@+id/speedconvention"
         android:layout_width="406dp"
-        android:layout_height="244dp"
+        android:layout_height="182dp"
         android:layout_centerInParent="true"
         android:gravity="center"
         android:text="KM/H"
         android:textSize="100sp"
         app:fontFamily="sans-serif"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.633"
+        app:layout_constraintHorizontal_bias="0.8"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.82" />
+        app:layout_constraintVertical_bias="0.55" />
+
+    <TextView
+        android:id="@+id/distancemade"
+        android:layout_width="410dp"
+        android:layout_height="122dp"
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:text=" 0 "
+        android:textSize="50sp"
+        app:fontFamily="sans-serif"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.794" />
 
     <Button
         android:id="@+id/speedconversor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
+        android:layout_marginStart="14dp"
         android:text="KM/H"
         app:layout_constraintBaseline_toBaselineOf="@+id/toastlatlong"
-        app:layout_constraintStart_toStartOf="@+id/speedconvention" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/toastlatlong"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
+        android:layout_marginStart="5dp"
         android:text="LAT/LONG"
         app:layout_constraintStart_toEndOf="@+id/speedconversor"
-        app:layout_constraintTop_toBottomOf="@+id/speedconvention" />
+        app:layout_constraintTop_toBottomOf="@+id/cleardistance" />
 
     <Button
         android:id="@+id/toastgoogle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
+        android:layout_marginStart="5dp"
         android:text="GOOGLE"
         app:layout_constraintBaseline_toBaselineOf="@+id/toastlatlong"
         app:layout_constraintStart_toEndOf="@+id/toastlatlong" />
@@ -69,9 +85,20 @@
         android:id="@+id/toastwaze"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
+        android:layout_marginStart="5dp"
         android:text="WAZE"
         app:layout_constraintBaseline_toBaselineOf="@+id/toastgoogle"
         app:layout_constraintStart_toEndOf="@+id/toastgoogle" />
+
+    <Button
+        android:id="@+id/cleardistance"
+        android:layout_width="250dp"
+        android:layout_height="52dp"
+        android:layout_marginStart="80dp"
+        android:layout_marginBottom="70dp"
+        android:gravity="center"
+        android:text="CLEAR DISTANCE"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </android.support.constraint.ConstraintLayout>

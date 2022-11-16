@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
@@ -23,10 +24,14 @@ import android.widget.Toast;
 public  class MainActivity extends AppCompatActivity implements LocationListener {
     protected LocationManager locationManager;
 
-    private String longitude,latitude;
+    private static final String PREFS_NAME = "com.gladic.speedmeasures";
+    private static final String PREFS_DISTANCE_STRING = "distancestring";
+
+    private String startlongitude,startlatitude,endlongitude,endlatitude;
 
     private TextView tspeed;
     private TextView speedconvention;
+    private TextView distancemade;
 
     private int speedconvert = 0;
 
@@ -35,7 +40,14 @@ public  class MainActivity extends AppCompatActivity implements LocationListener
     private Button toastgoogle;
     private Button toastwaze;
 
+    private Button cleardistance;
+
     private Context ctx;
+
+    private float[] results = {0, 0, 0, 0};;
+    private float distancedone=0;
+
+    private SharedPreferences mPrefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,13 +58,21 @@ public  class MainActivity extends AppCompatActivity implements LocationListener
 
         ctx = getApplicationContext();
 
+        mPrefs = ctx.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+
         tspeed = (TextView) findViewById(R.id.SPEED);
         speedconvention = (TextView) findViewById(R.id.speedconvention);
+        distancemade = (TextView) findViewById(R.id.distancemade);
 
         conversormeasure = (Button) findViewById(R.id.speedconversor);
         latlongtoast = (Button) findViewById(R.id.toastlatlong);
         toastgoogle = (Button) findViewById(R.id.toastgoogle);
         toastwaze = (Button) findViewById(R.id.toastwaze);
+
+        cleardistance = (Button) findViewById(R.id.cleardistance);
+
+        distancedone = mPrefs.getFloat(PREFS_DISTANCE_STRING,0);
+        distancemade.setText(String.valueOf(distancedone) + "");
 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -92,10 +112,10 @@ public  class MainActivity extends AppCompatActivity implements LocationListener
             public void onClick(View view) {
 
                 ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-                ClipData clip = ClipData.newPlainText("latlong", latitude + " " + longitude);
+                ClipData clip = ClipData.newPlainText("latlong", endlatitude + " " + endlongitude);
                 clipboard.setPrimaryClip(clip);
 
-                Toast.makeText(ctx, latitude + " " + longitude , Toast.LENGTH_LONG).show();
+                Toast.makeText(ctx, endlatitude + " " + endlongitude , Toast.LENGTH_LONG).show();
             }
         });
 
@@ -104,7 +124,7 @@ public  class MainActivity extends AppCompatActivity implements LocationListener
             public void onClick(View view) {
 
                 ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-                ClipData clip = ClipData.newPlainText("google", "https://maps.google.com/maps?q=" + latitude + ',' + longitude);
+                ClipData clip = ClipData.newPlainText("google", "https://maps.google.com/maps?q=" + endlatitude + ',' + endlongitude);
                 clipboard.setPrimaryClip(clip);
 
                 Toast.makeText(ctx, "Done" , Toast.LENGTH_LONG).show();
@@ -116,33 +136,75 @@ public  class MainActivity extends AppCompatActivity implements LocationListener
             public void onClick(View view) {
 
                 ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-                ClipData clip = ClipData.newPlainText("waze", "https://waze.com/ul?ll=" + latitude + ',' + longitude);
+                ClipData clip = ClipData.newPlainText("waze", "https://waze.com/ul?ll=" + endlatitude + ',' + endlongitude);
                 clipboard.setPrimaryClip(clip);
+
+                Toast.makeText(ctx, "Done" , Toast.LENGTH_LONG).show();
+            }
+        });
+
+        cleardistance.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                distancedone = 0;
+                distancemade.setText(0 + "");
 
                 Toast.makeText(ctx, "Done" , Toast.LENGTH_LONG).show();
             }
         });
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onLocationChanged(Location location) {
+
+        if(location.isFromMockProvider())
+        {
+            return;
+        }
+
         int speed =0;
 
-        latitude = String.valueOf(location.getLatitude());
-        longitude = String.valueOf(location.getLongitude());
+        startlatitude = endlatitude;
+        startlongitude = endlongitude;
+
+        endlatitude = String.valueOf(location.getLatitude());
+        endlongitude = String.valueOf(location.getLongitude());
 
         switch(speedconvert) {
             case 0 :
                 speed = (int) ((location.getSpeed() * 3600) / 1000);
-            break;
+                break;
             case 1:
                 speed = (int) (location.getSpeed() * 2.2369);
-            break;
+                break;
         }
 
         String get_final_velocity = (speed > 9) ? "0" + String.valueOf(speed) : (speed > 99) ? String.valueOf(speed) : "00" + String.valueOf(speed);
         tspeed.setText(get_final_velocity);
+
+        if(endlatitude == null || startlatitude == null)
+        {}
+        else {
+            location.distanceBetween(Float.valueOf(startlatitude), Float.valueOf(startlongitude), Float.valueOf(endlatitude), Float.valueOf(endlongitude), results);
+
+            if (results.length > 0 && speed > 0) {
+                distancedone = distancedone + results[0];
+                distancemade.setText(String.valueOf((int)distancedone) + "");
+            }
+        }
+
+
+    }
+
+    @Override
+    public void onPause()
+    {
+        final SharedPreferences.Editor edit = mPrefs.edit();
+        edit.putFloat(PREFS_DISTANCE_STRING, distancedone);
+        edit.commit();
+
+        super.onPause();
     }
 
     @Override
