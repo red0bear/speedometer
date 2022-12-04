@@ -72,6 +72,7 @@ public  class MainActivity extends AppCompatActivity implements LocationListener
         cleardistance = (Button) findViewById(R.id.cleardistance);
 
         distancedone = mPrefs.getFloat(PREFS_DISTANCE_STRING,0);
+
         distancemade.setText(String.valueOf(distancedone) + "");
 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -101,6 +102,15 @@ public  class MainActivity extends AppCompatActivity implements LocationListener
                     speedconvert = 0;
                     speedconvention.setText("KM/H");
                     conversormeasure.setText("KM/H");
+                }
+
+                switch(speedconvert) {
+                    case 0 :
+                        distancemade.setText(String.valueOf((int)distancedone / 0.6213712f) + "");
+                        break;
+                    case 1:
+                        distancemade.setText(String.valueOf((int)distancedone * 0.6213712f) + "");
+                        break;
                 }
 
                 Toast.makeText(ctx, "Done" , Toast.LENGTH_LONG).show();
@@ -190,7 +200,21 @@ public  class MainActivity extends AppCompatActivity implements LocationListener
 
             if (results.length > 0 && speed > 0) {
                 distancedone = distancedone + results[0];
-                distancemade.setText(String.valueOf((int)distancedone) + "");
+
+                if(distancedone > 1000)
+                {
+                   distancedone = distancedone / 1000;
+                }
+
+                switch(speedconvert) {
+                    case 0 :
+                        distancemade.setText(String.valueOf((int)distancedone / 0.6213712f) + "");
+                        break;
+                    case 1:
+                        distancemade.setText(String.valueOf((int)distancedone * 0.6213712f) + "");
+                    break;
+                }
+
             }
         }
 
@@ -201,6 +225,14 @@ public  class MainActivity extends AppCompatActivity implements LocationListener
     public void onPause()
     {
         final SharedPreferences.Editor edit = mPrefs.edit();
+
+        if(speedconvert == 0)
+        {}
+        else
+        {
+            distancedone = distancedone / 0.6213712f;
+        }
+
         edit.putFloat(PREFS_DISTANCE_STRING, distancedone);
         edit.commit();
 
