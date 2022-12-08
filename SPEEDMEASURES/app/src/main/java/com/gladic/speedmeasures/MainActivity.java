@@ -21,6 +21,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.DecimalFormat;
+
 public  class MainActivity extends AppCompatActivity implements LocationListener {
     protected LocationManager locationManager;
 
@@ -46,6 +48,8 @@ public  class MainActivity extends AppCompatActivity implements LocationListener
 
     private float[] results = {0, 0, 0, 0};;
     private float distancedone=0;
+
+    DecimalFormat df = new DecimalFormat();
 
     private SharedPreferences mPrefs;
 
@@ -73,7 +77,16 @@ public  class MainActivity extends AppCompatActivity implements LocationListener
 
         distancedone = mPrefs.getFloat(PREFS_DISTANCE_STRING,0);
 
-        distancemade.setText(String.valueOf(distancedone) + "");
+        df.setMaximumFractionDigits(3);
+
+        if(distancedone > 1000)
+        {
+            distancemade.setText(df.format(distancedone / 1000) + "km");
+        }else
+        {
+            distancemade.setText(df.format(distancedone) + "metros");
+        }
+
 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -102,15 +115,6 @@ public  class MainActivity extends AppCompatActivity implements LocationListener
                     speedconvert = 0;
                     speedconvention.setText("KM/H");
                     conversormeasure.setText("KM/H");
-                }
-
-                switch(speedconvert) {
-                    case 0 :
-                        distancemade.setText(String.valueOf((int)distancedone / 0.6213712f) + "");
-                        break;
-                    case 1:
-                        distancemade.setText(String.valueOf((int)distancedone * 0.6213712f) + "");
-                        break;
                 }
 
                 Toast.makeText(ctx, "Done" , Toast.LENGTH_LONG).show();
@@ -203,18 +207,12 @@ public  class MainActivity extends AppCompatActivity implements LocationListener
 
                 if(distancedone > 1000)
                 {
-                   distancedone = distancedone / 1000;
+                    distancemade.setText(df.format((speedconvert == 0)?distancedone / 1000 + " km":distancedone * 0.6213712f + " Kmi") );
+                }else
+                {
+                    distancemade.setText(df.format((speedconvert == 0)?distancedone+ " metros":distancedone * 0.6213712f + " mi") );
                 }
-
-                switch(speedconvert) {
-                    case 0 :
-                        distancemade.setText(String.valueOf((int)distancedone / 0.6213712f) + "");
-                        break;
-                    case 1:
-                        distancemade.setText(String.valueOf((int)distancedone * 0.6213712f) + "");
-                    break;
-                }
-
+                
             }
         }
 
