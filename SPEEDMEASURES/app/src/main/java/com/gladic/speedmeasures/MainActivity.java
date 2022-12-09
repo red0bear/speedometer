@@ -116,7 +116,15 @@ public  class MainActivity extends AppCompatActivity implements LocationListener
                     speedconvention.setText("KM/H");
                     conversormeasure.setText("KM/H");
                 }
-
+                /*
+                if(distancedone > 1000)
+                {
+                    distancemade.setText(df.format((speedconvert == 0)?distancedone / 1000:distancedone * 0.6213712f));
+                }else
+                {
+                    distancemade.setText(df.format((speedconvert == 0)?distancedone:distancedone * 0.6213712f) );
+                }
+                */
                 Toast.makeText(ctx, "Done" , Toast.LENGTH_LONG).show();
             }
         });
@@ -207,12 +215,12 @@ public  class MainActivity extends AppCompatActivity implements LocationListener
 
                 if(distancedone > 1000)
                 {
-                    distancemade.setText(df.format((speedconvert == 0)?distancedone / 1000 + " km":distancedone * 0.6213712f + " Kmi") );
+                    distancemade.setText(df.format((speedconvert == 0)?distancedone / 1000 :distancedone * 0.6213712f));
                 }else
                 {
-                    distancemade.setText(df.format((speedconvert == 0)?distancedone+ " metros":distancedone * 0.6213712f + " mi") );
+                    distancemade.setText(String.valueOf((speedconvert == 0)?distancedone:distancedone * 0.6213712f));
                 }
-                
+
             }
         }
 
