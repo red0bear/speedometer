@@ -31,6 +31,8 @@ public  class MainActivity extends AppCompatActivity implements LocationListener
 
     private String startlongitude,startlatitude,endlongitude,endlatitude;
 
+    private String measureunit ="";
+
     private TextView tspeed;
     private TextView speedconvention;
     private TextView distancemade;
@@ -81,10 +83,20 @@ public  class MainActivity extends AppCompatActivity implements LocationListener
 
         if(distancedone > 1000)
         {
-            distancemade.setText(df.format(distancedone / 1000) + "km");
+            if(speedconvert == 0)
+                measureunit = "km";
+            else
+                measureunit = "mi";
+
+            distancemade.setText(df.format((speedconvert == 0)?distancedone / 1000 :distancedone * 0.6213712f) + measureunit);
         }else
         {
-            distancemade.setText(df.format(distancedone) + "metros");
+            if(speedconvert == 0)
+                measureunit = "m";
+            else
+                measureunit = "mi";
+
+            distancemade.setText(String.valueOf((speedconvert == 0)?distancedone:distancedone * 0.6213712f) + measureunit);
         }
 
 
@@ -116,15 +128,7 @@ public  class MainActivity extends AppCompatActivity implements LocationListener
                     speedconvention.setText("KM/H");
                     conversormeasure.setText("KM/H");
                 }
-                /*
-                if(distancedone > 1000)
-                {
-                    distancemade.setText(df.format((speedconvert == 0)?distancedone / 1000:distancedone * 0.6213712f));
-                }else
-                {
-                    distancemade.setText(df.format((speedconvert == 0)?distancedone:distancedone * 0.6213712f) );
-                }
-                */
+
                 Toast.makeText(ctx, "Done" , Toast.LENGTH_LONG).show();
             }
         });
@@ -215,10 +219,20 @@ public  class MainActivity extends AppCompatActivity implements LocationListener
 
                 if(distancedone > 1000)
                 {
-                    distancemade.setText(df.format((speedconvert == 0)?distancedone / 1000 :distancedone * 0.6213712f));
+                    if(speedconvert == 0)
+                        measureunit = "km";
+                    else
+                        measureunit = "mi";
+
+                    distancemade.setText(df.format((speedconvert == 0)?distancedone / 1000 :distancedone * 0.6213712f) + measureunit);
                 }else
                 {
-                    distancemade.setText(String.valueOf((speedconvert == 0)?distancedone:distancedone * 0.6213712f));
+                    if(speedconvert == 0)
+                        measureunit = "m";
+                    else
+                        measureunit = "mi";
+
+                    distancemade.setText(String.valueOf((speedconvert == 0)?distancedone:distancedone * 0.6213712f) + measureunit);
                 }
 
             }
