@@ -1,3 +1,7 @@
+# Find a job ? 
+
+["GHOST JOBS" are INFECTING The Job Market ](https://www.youtube.com/watch?v=hsquOOlvOxg)
+
 # speedometer
   Simple speedometer to use on car, come with latitude and longitude clipboard , google and waze link 
 
