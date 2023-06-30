@@ -1,3 +1,7 @@
+# Find a job ? 
+
+["GHOST JOBS" are INFECTING The Job Market ](https://www.youtube.com/watch?v=hsquOOlvOxg)
+
 # speedometer
   Simple speedometer to use on car, come with latitude and longitude clipboard , google and waze link 
 
@@ -10,5 +14,5 @@
 # Do you wish support me ? 
   Please open a issue or just access http://l3y6aetzp7mnnzwafavrwfwjwupryr72gatp77c4yzeavinozgdgppad.onion/ and donate there !!! 
   
-  # Hit star please 
+  # Hit star please OR BURN IN HELL
   
