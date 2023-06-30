@@ -119,11 +119,12 @@ public  class MainActivity extends AppCompatActivity {
                 if(speedconvert == 0)
                 {
                     mService.setspeedconversor(1);
-
+                    speedconvert=1;
                     speedconvention.setText("MI/H");
                     conversormeasure.setText("MI/H");
 
                 }else {
+                    speedconvert = 0 ;
                     mService.setspeedconversor(0);
                     speedconvention.setText("KM/H");
                     conversormeasure.setText("KM/H");
