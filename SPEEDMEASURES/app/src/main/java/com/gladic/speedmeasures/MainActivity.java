@@ -1,5 +1,7 @@
 package com.gladic.speedmeasures;
 
+import android.app.Notification;
+import android.app.PendingIntent;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.ComponentName;
@@ -7,8 +9,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -31,9 +35,14 @@ public  class MainActivity extends AppCompatActivity {
         public void onServiceConnected(ComponentName className, IBinder service) {
             // We've bound to LocalService, cast the IBinder and get LocalService instance
             mService = ((servicespeedmeasures.LocalBinder)service).getService();
-            mService.settextView(tspeed,speedconvention,distancemade);
-            mService.setdistancedone(distancedone);
-            mBound = true;
+            if(!enable_foreground) {
+                mService.settextView(tspeed, speedconvention, distancemade);
+                mService.setdistancedone(distancedone);
+                mBound = true;
+            }else
+            {
+                mService.foreground_enable();
+            }
         }
 
         @Override
@@ -43,6 +52,7 @@ public  class MainActivity extends AppCompatActivity {
     };
     private static final String PREFS_NAME = "com.gladic.speedmeasures";
     private static final String PREFS_DISTANCE_STRING = "distancestring";
+    private static final String PREFS_FOREGROUND_STRING ="foregroundenabled";
 
     private String measureunit ="";
 
@@ -59,10 +69,14 @@ public  class MainActivity extends AppCompatActivity {
 
     private Button cleardistance;
 
+    private Button foreground;
+
     private Context ctx;
 
     private float[] results = {0, 0, 0, 0};;
     private float distancedone=0;
+
+    private boolean enable_foreground = false;
 
     DecimalFormat df = new DecimalFormat();
 
@@ -79,6 +93,9 @@ public  class MainActivity extends AppCompatActivity {
 
         mPrefs = ctx.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
 
+        distancedone = mPrefs.getFloat(PREFS_DISTANCE_STRING,0);
+        enable_foreground = mPrefs.getBoolean(PREFS_FOREGROUND_STRING,false);
+
         tspeed = (TextView) findViewById(R.id.SPEED);
         speedconvention = (TextView) findViewById(R.id.speedconvention);
         distancemade = (TextView) findViewById(R.id.distancemade);
@@ -88,9 +105,9 @@ public  class MainActivity extends AppCompatActivity {
         toastgoogle = (Button) findViewById(R.id.toastgoogle);
         toastwaze = (Button) findViewById(R.id.toastwaze);
 
-        cleardistance = (Button) findViewById(R.id.cleardistance);
+        foreground = (Button) findViewById(R.id.foreground);
 
-        distancedone = mPrefs.getFloat(PREFS_DISTANCE_STRING,0);
+        cleardistance = (Button) findViewById(R.id.cleardistance);
 
         df.setMaximumFractionDigits(3);
 
@@ -101,7 +118,8 @@ public  class MainActivity extends AppCompatActivity {
             else
                 measureunit = "mi";
 
-            distancemade.setText(df.format((speedconvert == 0)?distancedone / 1000 :distancedone * 0.6213712f) + measureunit);
+            if(!enable_foreground)
+                distancemade.setText(df.format((speedconvert == 0)?distancedone / 1000 :distancedone * 0.6213712f) + measureunit);
         }else
         {
             if(speedconvert == 0)
@@ -109,8 +127,18 @@ public  class MainActivity extends AppCompatActivity {
             else
                 measureunit = "mi";
 
-            distancemade.setText(String.valueOf((speedconvert == 0)?distancedone:distancedone * 0.6213712f) + measureunit);
+            if(!enable_foreground)
+                distancemade.setText(String.valueOf((speedconvert == 0)?distancedone:distancedone * 0.6213712f) + measureunit);
         }
+
+
+        foreground.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                enable_foreground = !enable_foreground;
+                Toast.makeText(ctx, "Done" , Toast.LENGTH_LONG).show();
+            }
+        });
 
         conversormeasure.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -186,12 +214,39 @@ public  class MainActivity extends AppCompatActivity {
         });
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onStart() {
         super.onStart();
+
         Intent intent = new Intent(this, servicespeedmeasures.class);
-        this.bindService(intent, connection, Context.BIND_AUTO_CREATE);
-        startService(intent);
+
+        if(enable_foreground)
+        {
+            PendingIntent pendingIntent =
+                    PendingIntent.getActivity(this, 0, intent,
+                            PendingIntent.FLAG_IMMUTABLE);
+
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                Notification notification =
+                        new Notification.Builder(this, "CHANNEL_DEFAULT_IMPORTANCE")
+                                .setContentTitle(getText(R.string.notification_title))
+                                .setContentText(getText(R.string.notification_message))
+                                .setSmallIcon(R.drawable.ic_launcher)
+                                .setContentIntent(pendingIntent)
+                                .setTicker(getText(R.string.ticker_text))
+                                .build();
+            }
+
+            // Notification ID cannot be 0.
+            this.startForegroundService(intent);
+        }
+        else
+        {
+            this.bindService(intent, connection, Context.BIND_AUTO_CREATE);
+            mBound = true;
+            startService(intent);
+        }
     }
 
     @Override
@@ -203,9 +258,14 @@ public  class MainActivity extends AppCompatActivity {
     protected void onDestroy()
     {
         super.onDestroy();
-        unbindService(connection);
-        mBound = false;
-        stopService(new Intent(this,servicespeedmeasures.class));
+
+        if(!enable_foreground)
+        {
+            unbindService(connection);
+            mBound = false;
+            stopService(new Intent(this,servicespeedmeasures.class));
+        }
+
     }
 
     @Override
@@ -224,6 +284,7 @@ public  class MainActivity extends AppCompatActivity {
         }
 
         edit.putFloat(PREFS_DISTANCE_STRING, distancedone);
+        edit.putBoolean(PREFS_FOREGROUND_STRING,enable_foreground);
         edit.commit();
 
         super.onPause();

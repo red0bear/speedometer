@@ -6,102 +6,103 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <LinearLayout
-        android:id="@+id/linearLayout"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="1dp"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
+    <ScrollView
+        android:id="@+id/scrollView2"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_marginStart="1dp"
+        android:layout_marginEnd="1dp"
+
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.916"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        >
 
-        <TextView
-            android:id="@+id/SPEED"
+        <TableLayout
             android:layout_width="match_parent"
-            android:layout_height="197dp"
-            android:layout_centerInParent="true"
-            android:gravity="center"
-            android:text="000"
-            android:textSize="164sp"
-            app:fontFamily="sans-serif" />
+            android:layout_height="wrap_content"
+            android:stretchColumns="1">
 
-        <TextView
-            android:id="@+id/speedconvention"
-            android:layout_width="match_parent"
-            android:layout_height="182dp"
-            android:layout_centerInParent="true"
-            android:gravity="center"
-            android:text="KM/H"
-            android:textSize="100sp"
-            app:fontFamily="sans-serif" />
+            <TextView
+                android:id="@+id/SPEED"
+                android:layout_width="fill_parent"
+                android:layout_height="385dp"
+                android:layout_centerInParent="true"
+                android:gravity="center"
+                android:layout_gravity="fill"
+                android:text="000"
+                android:textSize="200dp"
+                app:fontFamily="sans-serif" />
 
-        <TextView
-            android:id="@+id/distancemade"
-            android:layout_width="410dp"
-            android:layout_height="122dp"
-            android:layout_centerInParent="true"
-            android:gravity="center"
-            android:text=" 0 "
-            android:textSize="50sp"
-            app:fontFamily="sans-serif" />
+            <TextView
+                android:id="@+id/speedconvention"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_centerInParent="true"
+                android:gravity="center"
+                android:layout_gravity="fill"
+                android:text="KM/H"
+                android:textSize="100sp"
+                app:fontFamily="sans-serif" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/distancemade"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_centerInParent="true"
+                android:layout_gravity="fill"
+                android:gravity="center"
+                android:text=" 0 "
+                android:textSize="50sp"
+                app:fontFamily="sans-serif" />
 
             <Button
                 android:id="@+id/cleardistance"
+                android:layout_width="fill_parent"
+                android:layout_height="50dp"
+                android:gravity="center"
+                android:layout_gravity="fill"
+                android:text="CLEAR DISTANCE" />
+
+            <TableRow>
+
+            <Button
+                android:id="@+id/speedconversor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="fill"
+                android:text="KM/H" />
+
+            <Button
+                android:id="@+id/toastlatlong"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="LAT/LONG" />
+
+            <Button
+                android:id="@+id/toastgoogle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="GOOGLE" />
+
+            <Button
+                android:id="@+id/toastwaze"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="CLEAR DISTANCE" />
-        </LinearLayout>
+                android:text="WAZE" />
+            </TableRow>
 
-    </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/linearLayout2"
-        android:layout_width="410dp"
-        android:layout_height="75dp"
-        android:layout_marginBottom="4dp"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout">
+            <Button
+                android:id="@+id/foreground"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_gravity="fill"
+                android:text="ENABLE FOREGROUND" />
 
-        <Button
-            android:id="@+id/speedconversor"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="14dp"
-            android:text="KM/H" />
+        </TableLayout>
 
-        <Button
-            android:id="@+id/toastlatlong"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
-            android:text="LAT/LONG" />
-
-        <Button
-            android:id="@+id/toastgoogle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
-            android:text="GOOGLE" />
-
-        <Button
-            android:id="@+id/toastwaze"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
-            android:text="WAZE" />
-
-    </LinearLayout>
+    </ScrollView>
 
 </android.support.constraint.ConstraintLayout>

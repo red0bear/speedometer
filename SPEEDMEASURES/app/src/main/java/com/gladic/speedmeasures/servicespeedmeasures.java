@@ -47,6 +47,8 @@ public class servicespeedmeasures extends Service implements LocationListener {
     private float[] results = {0, 0, 0, 0};;
     private float distancedone=0;
 
+    private boolean foreground_enabled = false;
+
     DecimalFormat df = new DecimalFormat();
 
 
@@ -143,7 +145,9 @@ public class servicespeedmeasures extends Service implements LocationListener {
         }
 
         String get_final_velocity = (speed > 9) ? "0" + String.valueOf(speed) : (speed > 99) ? String.valueOf(speed) : "00" + String.valueOf(speed);
-        tspeed.setText(get_final_velocity);
+
+        if(!foreground_enabled)
+            tspeed.setText(get_final_velocity);
 
         if(endlatitude == null || startlatitude == null)
         {}
@@ -160,7 +164,8 @@ public class servicespeedmeasures extends Service implements LocationListener {
                     else
                         measureunit = "mi";
 
-                    distancemade.setText(df.format((speedconvert == 0)?distancedone / 1000 :distancedone * 0.6213712f) + measureunit);
+                    if(!foreground_enabled)
+                        distancemade.setText(df.format((speedconvert == 0)?distancedone / 1000 :distancedone * 0.6213712f) + measureunit);
                 }else
                 {
                     if(speedconvert == 0)
@@ -168,7 +173,8 @@ public class servicespeedmeasures extends Service implements LocationListener {
                     else
                         measureunit = "mi";
 
-                    distancemade.setText(String.valueOf((speedconvert == 0)?distancedone:distancedone * 0.6213712f) + measureunit);
+                    if(!foreground_enabled)
+                        distancemade.setText(String.valueOf((speedconvert == 0)?distancedone:distancedone * 0.6213712f) + measureunit);
                 }
 
             }
@@ -212,5 +218,7 @@ public class servicespeedmeasures extends Service implements LocationListener {
     {
         speedconvert = value;
     }
+
+    public void foreground_enable(){foreground_enabled = !foreground_enabled;}
 
 }
