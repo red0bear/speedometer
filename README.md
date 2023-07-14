@@ -13,6 +13,7 @@
   
 # Do you wish support me ? 
   Please open a issue or just access http://l3y6aetzp7mnnzwafavrwfwjwupryr72gatp77c4yzeavinozgdgppad.onion/ and donate there !!! 
+  Dont be a pajeet and Donate.
   
-  # Hit star please OR BURN IN HELL
+ # Hit star please OR BURN IN HELL
   
